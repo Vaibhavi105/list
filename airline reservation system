@@ -1,0 +1,126 @@
+[16:01, 8/10/2024] Vaibhavi: public class Flight {
+    private int flightId;
+    private String origin;
+    private String destination;
+    private String departureTime;
+    private int availableSeats;
+
+    public Flight(int flightId, String origin, String destination, String departureTime, int availableSeats) {
+        this.flightId = flightId;
+        this.origin = origin;
+        this.destination = destination;
+        this.departureTime = departureTime;
+        this.availableSeats = availableSeats;
+    }
+
+    public int getFlightId() {
+        return flightId;
+    }
+
+    public String getOrigin() {
+        return origin;
+    }
+
+    public String getDestination() {
+        return destination;
+    }
+
+    public String getDepartureTime() {
+        return departureTime;
+    }
+
+    public int getAvailableSeats() {
+        return availableSeats;
+    }
+
+    public void setAvailableSeats(int availableSeats) {
+        this.availableSeats = availableSeats;
+    }
+}
+[16:01, 8/10/2024] Vaibhavi: public class User {
+    private int userId;
+    private String name;
+    private String email;
+    private String password;
+
+    public User(int userId, String name, String email, String password) {
+        this.userId = userId;
+        this.name = name;
+        this.email = email;
+        this.password = password;
+    }
+
+    public int getUserId() {
+        return userId;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+}
+[16:01, 8/10/2024] Vaibhavi: public class Booking {
+    private int bookingId;
+    private int flightId;
+    private int userId;
+
+    public Booking(int bookingId, int flightId, int userId) {
+        this.bookingId = bookingId;
+        this.flightId = flightId;
+        this.userId = userId;
+    }
+
+    public int getBookingId() {
+        return bookingId;
+    }
+
+    public int getFlightId() {
+        return flightId;
+    }
+
+    public int getUserId() {
+        return userId;
+    }
+}
+[16:02, 8/10/2024] Vaibhavi: import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.WebServlet;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
+@WebServlet("/FlightServlet")
+public class FlightServlet extends HttpServlet {
+    private List<Flight> flights = new ArrayList<>();
+
+    @Override
+    public void init() throws ServletException {
+        flights.add(new Flight(1, "New York", "London", "2024-08-10 10:00 AM", 10));
+        flights.add(new Flight(2, "Los Angeles", "Tokyo", "2024-08-11 02:00 PM", 20));
+        // Add more flights here
+    }
+
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        String origin = request.getParameter("origin");
+        String destination = request.getParameter("destination");
+
+        List<Flight> availableFlights = new ArrayList<>();
+        for (Flight flight : flights) {
+            if (flight.getOrigin().equalsIgnoreCase(origin) && flight.getDestination().equalsIgnoreCase(destination)) {
+                availableFlights.add(flight);
+            }
+        }
+
+        request.setAttribute("flights", availableFlights);
+        request.getRequestDispatcher("viewFlights.jsp").forward(request, response
